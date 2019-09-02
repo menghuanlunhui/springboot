@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @description: SpringBoot启动类
  * @date 2019/8/30 13:49
  */
-@EnableTransactionManagement
+@EnableTransactionManagement //数据库表设置引擎为InnoDB 才支持事务,而MyISAM是不支持的
 @SpringBootApplication
 public class SpringBootStart {
 

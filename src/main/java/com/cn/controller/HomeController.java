@@ -6,6 +6,7 @@ import com.cn.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
@@ -58,8 +59,8 @@ public class HomeController {
     @MyLog(value = "更新用户信息")  //这里添加了AOP的自定义注解
     @RequestMapping("/updateUser")
     @ResponseBody
-    @Transactional
-    public Object updateUser(Long id,String nickname) {
+    @Transactional(rollbackFor = Exception.class)
+    public Object updateUser(Long id,String nickname)  throws Exception{
         JSONObject object = new JSONObject();
         User user = new User();
         user.setId(id);
@@ -69,10 +70,18 @@ public class HomeController {
             object.put("status","SUCCESS");
             object.put("msg",user);
         }else{
+            //手动事务回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             object.put("status","FALSE");
             object.put("msg","更新失败");
         }
-       //int j=1/0;//抛出异常，回滚
+        try {
+            int value = 5/0;
+        }catch (Exception e){
+            e.printStackTrace();
+            //异常抛出，自动回滚
+            throw new Exception("抛异常了");
+        }
         return object;
     }
 }
