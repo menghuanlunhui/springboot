@@ -1,5 +1,6 @@
 package com.cn;
 
+import com.cn.common.LogManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -16,12 +17,23 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 public class SpringBootStart  extends SpringBootServletInitializer {
 
+    /**
+     * tomcat启动时，运行该方法
+     * @param application
+     * @return
+     */
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        LogManager.startup("TomcatStart");
         return application.sources(SpringBootStart.class);
     }
 
+    /**
+     * Springboot直接启动，运行该方法
+     * @param args
+     */
     public static void main(String[] args) {
+        LogManager.startup("SpringBootStart");
         SpringApplication.run(SpringBootStart.class, args);
         System.out.println("*********    SpringBoot启动成功      *******ﾞ\n");
     }
