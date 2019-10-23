@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cn.mapper.GroupMapper">
+
+	<cache type="com.cn.redis.MybatisRedisCache" />
+	<resultMap id="Group" type="com.cn.entity.Group">
+		<id property="id" column="id_" />
+		<result property="name" column="name_" />
+		<result property="parentId" column="parent_id_" />
+		<result property="code" column="code_" />
+		<result property="type" column="type_" />
+		<result property="desc" column="desc_" />
+		<result property="path" column="path_" />
+		<result property="sn" column="sn_" />
+		<result property="createTime" column="create_time_" />
+		<result property="createBy" column="create_by_" />
+		<result property="updateTime" column="update_time_" />
+		<result property="updateBy" column="update_by_" />
+	</resultMap>
+
+	<insert id="create" parameterType="com.cn.entity.Group">
+		INSERT INTO org_group
+		(id_,name_,parent_id_,code_,type_,desc_,path_,sn_,create_by_)
+		VALUES 
+		(#{id}, #{name}, #{parentId}, #{code}, #{type}, #{desc}, #{path}, #{sn},  #{createBy})
+	</insert>
+
+	<update id="update" parameterType="com.cn.entity.Group">
+		UPDATE org_group SET
+		<trim  suffixOverrides="," >
+			<if test="name != null and name != ''" >
+				name_ =  #{name},
+			</if>
+			<if test="parentId != null and parentId != ''" >
+				parent_id_ =  #{parentId},
+			</if>
+			<if test="code != null and code != ''" >
+				code_ =  #{code},
+			</if>
+			<if test="type != null and type != ''" >
+				type_ =  #{type},
+			</if>
+			<if test="path != null and path != ''" >
+				path_ =  #{path},
+			</if>
+			<if test="desc != null and desc != ''" >
+				desc_ =  #{desc},
+			</if>
+			<if test="sn != null and sn != ''" >
+				sn_ =  #{sn},
+			</if>
+
+			<if test="createBy != null and createBy != ''" >
+				create_by_ =  #{createBy},
+			</if>
+			<if test="updateTime != null " >
+				update_time_ =  #{updateTime},
+			</if>
+			<if test="updateBy != null and updateBy != ''" >
+				update_by_ =  #{updateBy},
+			</if>
+		</trim>
+		WHERE   id_=#{id}
+	</update>
+
+	<select id="getByCode"   parameterType="java.lang.String" resultMap="Group">
+		SELECT * FROM org_group
+		WHERE
+		code_=#{code}
+	</select>
+
+</mapper>
